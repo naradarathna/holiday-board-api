@@ -10,6 +10,7 @@ export class OrganizationsController {
   async createOrganization(@Body() createOrganizationDto: CreateOrganizationDto) {
     return await this.createOrganizationUseCase.execute({
       name: createOrganizationDto.name,
+      adminEmail: createOrganizationDto.adminEmail,
     });
   }
 }
