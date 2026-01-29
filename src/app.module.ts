@@ -1,5 +1,6 @@
 // src/app.module.ts
 import { Module } from '@nestjs/common';
+import { AuthModule } from './presentation/auth.module';
 import { LeavesController } from './presentation/web/leaves.controller'; // Import here
 import { OrganizationsController } from './presentation/web/organizations.controller';
 import { UsersController } from './presentation/web/users.controller';
@@ -12,6 +13,7 @@ import { PrismaOrganizationRepository } from './infrastructure/repositories/pris
 import { PrismaUserRepository } from './infrastructure/repositories/prisma-user.repository';
 
 @Module({
+  imports: [AuthModule],
   controllers: [LeavesController, OrganizationsController, UsersController], // Register here
   providers: [
     PrismaService,

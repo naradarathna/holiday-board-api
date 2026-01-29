@@ -13,6 +13,12 @@ export class PrismaUserRepository implements IUserRepository {
     return this.mapToDomain(record);
   }
 
+  async findByEmail(email: string): Promise<UserEntity | null> {
+    const record = await this.prisma.user.findUnique({ where: { email } });
+    if (!record) return null;
+    return this.mapToDomain(record);
+  }
+
   async save(user: UserEntity): Promise<UserEntity> {
     const data = {
       email: user.email,

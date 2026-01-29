@@ -39,6 +39,7 @@ model User {
   role           UserRole       @default(EMPLOYEE)
   organization   Organization   @relation(fields: [organizationId], references: [id])
   leaveRequests  LeaveRequest[]
+  sessions       Session[]
 }
 
 model LeaveRequest {
@@ -49,4 +50,11 @@ model LeaveRequest {
   userId         String
   user           User     @relation(fields: [userId], references: [id])
   organizationId String
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
 }

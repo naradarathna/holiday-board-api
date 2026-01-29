@@ -1,7 +1,9 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { RequestLeaveUseCase } from '../../core/use-cases/request-leave.use-case';
 import { CreateLeaveDto } from '../shared/create-leave.dto'; // Import the DTO
+import { AuthGuard } from './../guards/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('leaves')
 export class LeavesController {
   constructor(private readonly requestLeaveUseCase: RequestLeaveUseCase) {}
