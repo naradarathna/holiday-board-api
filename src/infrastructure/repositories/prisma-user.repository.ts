@@ -16,6 +16,9 @@ export class PrismaUserRepository implements IUserRepository {
   async save(user: UserEntity): Promise<UserEntity> {
     const data = {
       email: user.email,
+      password: user.password,
+      firstName: user.firstName,
+      lastName: user.lastName,
       organizationId: user.organizationId,
       role: user.role,
     };
@@ -28,6 +31,14 @@ export class PrismaUserRepository implements IUserRepository {
   }
 
   private mapToDomain(record: any): UserEntity {
-    return new UserEntity(record.id, record.email, record.organizationId, record.role as UserRole);
+    return new UserEntity(
+      record.id,
+      record.email,
+      record.password,
+      record.firstName,
+      record.lastName,
+      record.organizationId,
+      record.role as UserRole,
+    );
   }
 }

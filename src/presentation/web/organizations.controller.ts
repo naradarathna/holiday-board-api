@@ -11,6 +11,9 @@ export class OrganizationsController {
     return await this.createOrganizationUseCase.execute({
       name: createOrganizationDto.name,
       adminEmail: createOrganizationDto.adminEmail,
+      adminPassword: createOrganizationDto.adminPassword,
+      adminFirstName: createOrganizationDto.adminFirstName,
+      adminLastName: createOrganizationDto.adminLastName,
     });
   }
 }
