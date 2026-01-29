@@ -22,7 +22,6 @@ export class LoginUseCase {
   ) {}
 
   async execute(command: LoginCommand): Promise<{ accessToken: string }> {
-    console.log('LoginUseCase: execute called with command:', command);
     const user = await this.userRepo.findByEmail(command.email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');

@@ -16,7 +16,6 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() dto: LoginDto) {
-    console.log('AuthController: login called with dto:', dto);
     return await this.loginUseCase.execute(dto);
   }
 
