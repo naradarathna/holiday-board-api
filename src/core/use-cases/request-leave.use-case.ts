@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { LeaveRequestEntity, LeaveStatus } from '../entities/leave-request.entity';
 import { ILeaveRepository } from '../ports/leave.repository';
 
@@ -33,6 +33,20 @@ export class RequestLeaveUseCase {
     // has enough balance or if dates overlap.
 
     // 3. Save via the Repository Port
-    return await this.leaveRepo.save(leaveRequest);
+    try {
+      return await this.leaveRepo.save(leaveRequest);
+    } catch (error: any) {
+      if (error.code === 'P2003') {
+        // Check which field caused the foreign key violation
+        if (error.meta?.field_name?.includes('userId') || error.message?.includes('userId')) {
+          throw new BadRequestException('User ID is incorrect or does not exist');
+        }
+        if (error.meta?.field_name?.includes('organizationId') || error.message?.includes('organizationId')) {
+          throw new BadRequestException('Organization ID is incorrect or does not exist');
+        }
+        throw new BadRequestException('User ID or Organization ID is incorrect or does not exist');
+      }
+      throw error;
+    }
   }
 }

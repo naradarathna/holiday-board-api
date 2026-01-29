@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { OrganizationEntity } from '../entities/organization.entity';
 import { IOrganizationRepository } from '../ports/organization.repository';
 
@@ -15,6 +15,13 @@ export class CreateOrganizationUseCase {
 
   async execute(command: CreateOrganizationCommand): Promise<OrganizationEntity> {
     const organization = new OrganizationEntity(null, command.name);
-    return await this.organizationRepo.save(organization);
+    try {
+      return await this.organizationRepo.save(organization);
+    } catch (error: any) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('Organization with this name already exists');
+      }
+      throw error;
+    }
   }
 }

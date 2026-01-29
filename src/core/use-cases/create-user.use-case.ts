@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Inject, Injectable } from '@nestjs/common';
 import { UserEntity, UserRole } from '../entities/user.entity';
 import { IUserRepository } from '../ports/user.repository';
 
@@ -22,6 +22,16 @@ export class CreateUserUseCase {
       command.organizationId,
       command.role || UserRole.EMPLOYEE,
     );
-    return await this.userRepo.save(user);
+    try {
+      return await this.userRepo.save(user);
+    } catch (error: any) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('User with this email already exists');
+      }
+      if (error.code === 'P2003') {
+        throw new BadRequestException('Organization ID is incorrect or does not exist');
+      }
+      throw error;
+    }
   }
 }
